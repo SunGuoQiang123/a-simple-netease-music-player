@@ -34,7 +34,7 @@ export default {
     play (song) {
       this.$store.dispatch({
         type:'play',
-        id:song.id
+        song:song
       })
     }
   },

@@ -1,14 +1,30 @@
 <template>
   <div id="player">
-    <audio :src="song.url" controls id='r-player' ref='player' autoplay></audio>
+    <audio
+      :src="song.url" controls
+      id='r-player' ref='player'
+      autoplay @play='togglePlayStatus(true)'
+      @pause='togglePlayStatus(false)' @ended='playNext'
+      @timeupdate='updateTimebar'></audio>
     <div id='s-player'>
       <div class="s-playbar">
         <a href="javascript:void(0)" class="btns prev-btn" @click='playPrev'></a>
         <a href="javascript:void(0)" :class="['btns', isPlaying ? 'play-btn':'pause-btn']" @click='togglePlay'></a>
         <a href="javascript:void(0)" class="btns next-btn" @click='playNext'></a>
       </div>
-      <div class="s-cover">
-
+      <div class="s-cover" href='javascript:void(0)'>
+        <img :src="picUrl" alt="" class='s-cover__img' />
+        <a href="javascript:void(0)" class='s-cover__a'></a>
+      </div>
+      <div class="play">
+        <div></div>
+        <div class='play__progress'>
+          <div class="play__timeBar">
+            <input type="range" class='play_all' v-model="curPercentage" min='0' max='100' step='0.01' />
+            <span class='play_cur' :style="{width:curPercentage+'%'}"></span>
+          </div>
+          <div class="play_time"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -20,41 +36,51 @@ export default {
   name: "player",
   data: function data() {
     return {
-      isPlaying: false
+      isPlaying: false,
+      curPercentage:0
     }
   },
   computed: {
-    song: {
-      get: function () {
-        return this.$store.state.playingSong
-      },
-      set: function (song) {
-        this.$store.dispatch({
-          type:'play',
-          id:song.id
-        })
-      }
+    song () {
+      return this.$store.state.playingSong
     },
     playList () {
       return this.$store.state.playingList
-    }
+    },
+    picUrl () {
+      return JSON.stringify(this.song) !== '{}' ? this.song.al.picUrl : "http://s4.music.126.net/style/web2/img/default/default_album.jpg"
+    },
   },
   methods: {
     togglePlay () {
       this.isPlaying ? player.pause() : player.play()
-      this.isPlaying = !this.isPlaying
     },
     playPrev () {
+      this.togglePlayStatus(false)
       let prevIndex = this.playList.findIndex(song => song.id === this.song.id) - 1
       if (prevIndex >= 0) {
-        this.song = this.playList[prevIndex]
+        this.play(this.playList[prevIndex])
       }
     },
     playNext () {
+      this.togglePlayStatus(false)
       let nextIndex = this.playList.findIndex(song => song.id === this.song.id) + 1
       if (nextIndex < this.playList.length) {
-        this.song = this.playList[nextIndex]
+        this.play(this.playList[nextIndex])
       }
+    },
+    togglePlayStatus (isPlaying = false) {
+      this.isPlaying = isPlaying
+    },
+    play (song) {
+      this.$store.dispatch({
+        type:'play',
+        song:song
+      })
+    },
+    updateTimebar () {
+      console.dir(player)
+      this.curPercentage = (player.currentTime/player.duration)*100
     }
   },
   mounted () {
@@ -94,6 +120,7 @@ export default {
   .s-playbar{
     display:flex;
     align-items: center;
+    width:137px;
   }
   .play-btn{
     width:36px;
@@ -126,5 +153,66 @@ export default {
   }
   .next-btn:hover{
     background-position: -110px -130px;
+  }
+  .s-cover{
+    width: 34px;
+    height:34px;
+    position:relative;
+    margin-right:15px;
+  }
+  .s-cover__img{
+    width:34px;
+    height:34px;
+  }
+  .s-cover__a{
+    position:absolute;
+    top:0;
+    left:0;
+    width:34px;
+    height:35px;
+    background:url('../assets/playbar.png');
+    background-position:0 -80px;
+  }
+  .play_all{
+    width:493px;
+    height:9px;
+    -webkit-appearance:none;
+    background:url('../assets/statbar.png');
+    background-position: right -30px;
+    outline:none;
+  }
+  input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: url('../assets/iconall.png');
+    background-position:0 -250px;
+    width:22px;
+    height:24px;
+    cursor: pointer;
+    z-index:10;
+    position:relative;
+    right:-12px;
+    top:1px;
+  }
+  input[type='range']::-moz-range-thumb {
+    -webkit-appearance: none;
+    background: url('../assets/iconall.png');
+    background-position:0 -250px;
+    width:22px;
+    height:24px;
+    cursor: pointer;
+  }
+  input[type='range']::-webkit-slider-thumb:hover{
+    background-position:0 -280px;
+  }
+  .play__timeBar{
+    position:relative;
+  }
+  .play_cur{
+    position:absolute;
+    height:9px;
+    left:0;
+    top:4px;
+    background:url('../assets/statbar.png');
+    background-position:left -66px;
   }
 </style>

@@ -120,7 +120,7 @@ export default {
   },
   created: function created() {
     //do something after creating vue instance
-    console.log(this.$options)
+    // console.log(this.$options)
   },
   components: {albumList, playList, artistList, songList, profileList, djRadioList, player}
 }

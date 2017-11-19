@@ -19,7 +19,7 @@ const store = new Vuex.Store({
       profileList:[],
       mvs:[],
       djRadioList:[],
-      songList:[]
+      lirics:[]
     }
   },
   mutations: {
@@ -41,11 +41,11 @@ const store = new Vuex.Store({
   },
   actions: {
     play ({commit}, payload) {
-      axios.get("https://api.imjad.cn/cloudmusic?type=song&id=" + payload.id)
+      axios.get("https://api.imjad.cn/cloudmusic?type=song&id=" + payload.song.id)
       .then((res) => {
         commit({
           type:'play',
-          song: res.data.data[0]
+          song: Object.assign(payload.song, res.data.data[0])
         })
       }).catch((err) => {
         console.log(err)
@@ -87,7 +87,7 @@ const store = new Vuex.Store({
       }).then(song => {
         dispatch({
           type:'play',
-          id:song.id
+          song:song
         })
       }).catch(err => {console.log(err)})
     },
@@ -101,7 +101,7 @@ const store = new Vuex.Store({
       }).then(song => {
         dispatch({
           type:'play',
-          id:song.id
+          song:song
         })
       }).catch(err => {console.log(err)})
     },
