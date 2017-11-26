@@ -18,28 +18,33 @@
       </div>
       <div class="play">
         <div></div>
-        <div class='play__progress'>
+        <!-- <div class='play__progress'>
           <div class="play__timeBar">
             <input type="range" class='play_all' v-model="curPercentage" min='0' max='100' step='0.01' />
             <span class='play_cur' :style="{width:curPercentage+'%'}"></span>
           </div>
-          <div class="play_time"></div>
-        </div>
+        </div> -->
+        <slider :max='totalTime' :min='0' :step='1' v-model='currentTime' class='play__progress'></slider>
       </div>
     </div>
   </div>
 </template>
 <script>
 import {mapState} from 'vuex'
+import slider from './slider'
 let player
 export default {
   name: "player",
   data: function data() {
     return {
       isPlaying: false,
-      curPercentage:0
+      // curPercentage:0,
+      testSlider:0,
+      totalTime:0,
+      currentTime:0,
     }
   },
+  components: {slider},
   computed: {
     song () {
       return this.$store.state.playingSong
@@ -80,19 +85,25 @@ export default {
     },
     updateTimebar () {
       console.dir(player)
-      this.curPercentage = (player.currentTime/player.duration)*100
+      this.currentTime = player.currentTime
+      this.totalTime = player.duration
+      // this.curPercentage = (player.currentTime/player.duration)*100
     }
   },
   mounted () {
     player = this.$refs.player
     console.dir(player)
+    player.durationchange = function () {
+      console.dir('111111111111', player.duration);
+      this.totalTime = player.duration
+    }
     player.onplay = function () {
       this.isPlaying = true
     }
   }
 }
 </script>
-<style scopde>
+<style scoped>
   #player{
     position:fixed;
     bottom:0;
