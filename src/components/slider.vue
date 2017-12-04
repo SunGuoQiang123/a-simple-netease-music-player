@@ -7,7 +7,7 @@
       <div class="slider__curBar" :style='curStyle'>
 
       </div>
-      <div class="slider__rdyBar">
+      <div class="slider__rdyBar" :style="rdyStyle">
 
       </div>
       <div class="slider__button" ref='sliderBtn' :style='btnStyle' @mousedown='handleMouseDown'>
@@ -41,14 +41,16 @@ export default {
       type: Number,
       default:0
     },
+    rdyTime:{
+      type:Number,
+      default:0
+    }
   },
   methods: {
     handleSliderClick (e) {
       if (this.dragging) return
-      // console.log('click happened','   ',e.clientX)
       const offsetLeft = this.$refs.slider.getBoundingClientRect().left
       const sliderSize = this.$refs.slider.clientWidth
-      // this.setPosition((e.clientX - offsetLeft)/sliderSize*100)
       let targetPercent = (e.clientX - offsetLeft)/sliderSize*100
       let targetValue = this.min + targetPercent * (this.max - this.min)/100
       this.setValue(targetValue)
@@ -81,18 +83,19 @@ export default {
         value = this.max
       }
       if (value !== this.value) {
-        this.$emit('input',value)
+        this.$emit('change',value)
       }
     }
-    // setPosition (percent) {
-    //   let targetValue = this.min + percent * (this.max - this.min)/100
-    //   this.refs.sliderBtn.setPosition(percent)
-    // }
   },
   computed: {
     curStyle () {
       return {
         width: (this.value-this.min)/(this.max-this.min)*100 + '%'
+      }
+    },
+    rdyStyle () {
+      return {
+        width: (this.rdyTime-this.min)/(this.max-this.min)*100+'%'
       }
     },
     btnStyle () {
@@ -109,7 +112,7 @@ export default {
     width:493px;
     height:9px;
     background:url('../assets/statbar.png');
-    background-position:left -30px;
+    background-position:right 0;
   }
   .slider__runway{
     height:9px;
@@ -121,6 +124,14 @@ export default {
     background:url('../assets/statbar.png');
     background-position:left -66px;
     height:9px;
+  }
+  .slider__rdyBar{
+    position:absolute;
+    left:0;
+    top:0;
+    height:9px;
+    background:url('../assets/statbar.png');
+    background-position: right -30px;
   }
   .slider__button{
     position:absolute;

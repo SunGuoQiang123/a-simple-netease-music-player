@@ -17,14 +17,10 @@
         <a href="javascript:void(0)" class='s-cover__a'></a>
       </div>
       <div class="play">
-        <div></div>
-        <!-- <div class='play__progress'>
-          <div class="play__timeBar">
-            <input type="range" class='play_all' v-model="curPercentage" min='0' max='100' step='0.01' />
-            <span class='play_cur' :style="{width:curPercentage+'%'}"></span>
-          </div>
-        </div> -->
-        <slider :max='totalTime' :min='0' :step='1' v-model='currentTime' class='play__progress'></slider>
+        <div>
+          <span>{{songName}}</span><span>{{songArtists}}</span>
+        </div>
+        <slider :max='totalTime' :min='0' :step='1' v-model='currentTime' class='play__progress' @change='handleChange' :rdyTime='readyTime'></slider>
       </div>
     </div>
   </div>
@@ -38,10 +34,10 @@ export default {
   data: function data() {
     return {
       isPlaying: false,
-      // curPercentage:0,
       testSlider:0,
       totalTime:0,
       currentTime:0,
+      readyTime:0,
     }
   },
   components: {slider},
@@ -55,6 +51,13 @@ export default {
     picUrl () {
       return JSON.stringify(this.song) !== '{}' ? this.song.al.picUrl : "http://s4.music.126.net/style/web2/img/default/default_album.jpg"
     },
+    songName() {
+      // console.log(JSON.stringify(this.song) === '{}') 
+      return JSON.stringify(this.song) !== '{}' ? this.song.al.name : ""
+    },
+    songArtists () {
+      return JSON.stringify(this.song) !== '{}' ? this.song.ar.map(artist=>artist.name).join('/') : ""
+    }
   },
   methods: {
     togglePlay () {
@@ -84,17 +87,19 @@ export default {
       })
     },
     updateTimebar () {
-      console.dir(player)
+      // console.dir(player)
       this.currentTime = player.currentTime
-      this.totalTime = player.duration
-      // this.curPercentage = (player.currentTime/player.duration)*100
+      this.readyTime = player.buffered.end(player.buffered.length-1)
+    },
+    handleChange (time) {
+      player.currentTime = time
     }
   },
   mounted () {
     player = this.$refs.player
     console.dir(player)
-    player.durationchange = function () {
-      console.dir('111111111111', player.duration);
+    player.oncanplay = () => {
+      // console.dir(player.duration);
       this.totalTime = player.duration
     }
     player.onplay = function () {
