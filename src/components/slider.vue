@@ -113,6 +113,7 @@ export default {
     height:9px;
     background:url('../assets/statbar.png');
     background-position:right 0;
+    top:-3px;
   }
   .slider__runway{
     height:9px;

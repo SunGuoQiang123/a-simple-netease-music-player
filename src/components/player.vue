@@ -18,7 +18,8 @@
       </div>
       <div class="play">
         <div>
-          <span>{{songName}}</span><span>{{songArtists}}</span>
+          <a class='deco songName' href='#javascript:void(0)'>{{songName}}</a>
+          <a class='deco songArtist' href='#javascript:void(0)'>{{songArtists}}</a>
         </div>
         <slider :max='totalTime' :min='0' :step='1' v-model='currentTime' class='play__progress' @change='handleChange' :rdyTime='readyTime'></slider>
       </div>
@@ -52,7 +53,6 @@ export default {
       return JSON.stringify(this.song) !== '{}' ? this.song.al.picUrl : "http://s4.music.126.net/style/web2/img/default/default_album.jpg"
     },
     songName() {
-      // console.log(JSON.stringify(this.song) === '{}') 
       return JSON.stringify(this.song) !== '{}' ? this.song.al.name : ""
     },
     songArtists () {
@@ -230,5 +230,18 @@ export default {
     top:4px;
     background:url('../assets/statbar.png');
     background-position:left -66px;
+  }
+  .play{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 34px;
+  }
+  .play .songArtist{
+    color:#9b9b9b;
+    margin-left:15px;
+  }
+  .play .songName{
+    color:#e8e8e8;
   }
 </style>
