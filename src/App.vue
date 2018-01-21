@@ -3,7 +3,7 @@
     <div class="main">
       <div class="search">
         <input type='search' v-model.trim='search' />
-        <span @click='searchMusicBy(searchParts[0])'>搜索2</span>
+        <span @click='searchMusicBy(searchParts[0])'>搜索</span>
       </div>
       <!-- <p class='searchIntroduction'>搜索"{{search}}",找到{{}}</p> -->
       <ul class="search_choice_item">
