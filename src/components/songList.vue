@@ -52,10 +52,10 @@ export default {
   },
   filters: {
     formatTime (value) {
-      let totalSeconds = Math.floor(value*Math.pow(10,-3))
-      let minutes = Math.floor(totalSeconds/60)
-      let seconds = totalSeconds%60
-      return (minutes <10 ? '0'+minutes : minutes) + ':' + (seconds < 10 ? '0'+ seconds : seconds)
+      let totalSeconds = Math.floor(value * Math.pow(10,-3));
+      let minutes = Math.floor(totalSeconds / 60);
+      let seconds = totalSeconds % 60;
+      return (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0'+ seconds : seconds);
     }
   }
 }

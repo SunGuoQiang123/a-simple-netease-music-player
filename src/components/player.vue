@@ -38,7 +38,7 @@ export default {
       testSlider:0,
       totalTime:0,
       currentTime:0,
-      readyTime:0,
+      readyTime:0
     }
   },
   components: {slider},
@@ -97,7 +97,6 @@ export default {
   },
   mounted () {
     player = this.$refs.player
-    console.dir(player)
     player.oncanplay = () => {
       // console.dir(player.duration);
       this.totalTime = player.duration

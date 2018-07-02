@@ -12,7 +12,7 @@
         </li>
       </ul>
       <div class="search_result_container">
-        <component :is='currentPart.listName'></component>
+        <component :is="currentPart.listName"></component>
       </div>
     </div>
     <!-- <audio :src="playingSong.url" controls ref='audioPlayer' autoplay>
@@ -23,7 +23,6 @@
 </template>
 
 <script>
-
 import albumList from './components/albumList'
 import playList from './components/playList'
 import artistList from './components/artistList'
@@ -94,7 +93,7 @@ export default {
       this.$store.dispatch({
         type:'searchMusic',
         search:this.search,
-        classify:classify
+        classify
       })
     },
     play (song) {
