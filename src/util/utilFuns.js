@@ -7,15 +7,3 @@ export function formatObject (obj, text) {
   }
   return obj
 }
-
-export function curry(fn) {
-  const arg = [].slice.call(arguments, 1);
-  return function() {
-    const newArgs = arg.concat([].slice.call(arguments));
-    fn.apply(null, newArgs);
-  }
-}
-
-function add (x, y) {
-  return x + y;
-}
