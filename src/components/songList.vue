@@ -5,8 +5,8 @@
         <div class="songItem">
           <span class='song-play' @click='play(song)'></span>
           <div class="song-info">
-            <a href='#' class='deco songName' v-html='song.name'>{{song.name}}</a>
-            <a href="#" class='songMv' v-if='song.mv > 0'></a>
+            <router-link :to = "'/song/' + song.id" class='deco songName' v-html='song.name'>{{song.name}}</router-link>
+            <a href="#" class='songMv' v-if='song.mv'></a>
           </div>
           <div class="song-handle">
             <a href='#' class='addList'></a>
@@ -24,7 +24,7 @@
 </template>
 <script>
 export default {
-  name: "songlist",
+  name: "songist",
   data: function data() {
     return {
 
@@ -33,8 +33,8 @@ export default {
   methods:{
     play (song) {
       this.$store.dispatch({
-        type:'play',
-        song:song
+        type: 'play',
+        song: song
       })
     }
   },

@@ -1,25 +1,26 @@
-import axios from 'axios'
-import Vue from 'vue'
-import Vuex from 'vuex'
-import {formatObject} from '../util/utilFuns'
+import axios from 'axios';
+import Vue from 'vue';
+import Vuex from 'vuex';
+import {formatObject} from '../util/utilFuns';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    playingSong:{},
-    playingList:[],
-    album:{},
-    songList:{},
-    searchResult:{
-      playList:[],
-      songList:[],
-      albumList:[],
-      artistList:[],
-      profileList:[],
-      mvs:[],
-      djRadioList:[],
-      lirics:[]
+    playingSong: {},
+    viewingSong: {},
+    playingList: [],
+    album: {},
+    songList: {},
+    searchResult: {
+      playList: [],
+      songList: [],
+      albumList: [],
+      artistList: [],
+      profileList: [],
+      mvs: [],
+      djRadioList: [],
+      lirics: []
     }
   },
   mutations: {
@@ -37,6 +38,9 @@ const store = new Vuex.Store({
     },
     searchMusic (state, payload) {
       state.searchResult[payload.classify] = payload.data
+    },
+    fetchSong(state, payload) {
+      state.viewingSong = Object.assign(payload.song, state.searchResult.songList.find(searchSong => searchSong.id === payload.song.id));
     }
   },
   actions: {
@@ -147,6 +151,18 @@ const store = new Vuex.Store({
           data:searchResult
         })
       }).catch((err) => {
+        console.log(err)
+      })
+    },
+    fetchSong({commit}, id) {
+      axios.get("https://api.imjad.cn/cloudmusic?type=song&id=" + id)
+      .then(data => {
+        // console.log(song);
+        commit({
+          type: 'fetchSong',
+          song: data.data.data[0]
+        });
+      }).catch(err => {
         console.log(err)
       })
     }
